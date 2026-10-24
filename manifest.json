@@ -1,0 +1,150 @@
+{
+  "id": "awtrix_ng",
+  "name": "AWTRIX NG (Ulanzi TC002)",
+  "version": "0.1.0",
+  "description": "Show your FiestaBoard pages on a Ulanzi TC002 running AWTRIX NG, as an app in its rotation, over your local network.",
+  "author": "Oliver Rummeyer",
+  "repository": "https://github.com/rummeyer/fiestaboard-output--awtrix-ng",
+  "documentation": "README.md",
+  "icon": "grid-3x3",
+  "category": "output",
+  "plugin_type": "output",
+  "fiestaboard_version": ">=10.0.0",
+  "data_files": [
+    "output/device-models.json"
+  ],
+  "output": {
+    "output_api": 1,
+    "device_models": {
+      "$ref": "output/device-models.json"
+    },
+    "delivery": "push",
+    "min_interval_ms": 1000,
+    "read_back": {
+      "supported": false,
+      "cost": "cheap",
+      "suggested_interval_s": 30
+    },
+    "native_transitions": [],
+    "settings_schema": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "string",
+          "title": "Clock address",
+          "description": "The TC002's IP address or local name on your network (for example 192.168.1.60 or awtrixng-a1b2c3.local). Use Find my clock, or type it in.",
+          "minLength": 1,
+          "ui:widget": "device-picker",
+          "ui:options": {
+            "action": "find_awtrix",
+            "value_key": "host",
+            "label_key": "label"
+          }
+        },
+        "app_name": {
+          "type": "string",
+          "title": "App name",
+          "description": "The name of the app the board shows up as in the clock's rotation. Letters, digits, - and _, at most 32.",
+          "pattern": "^[A-Za-z0-9_-]{1,32}$",
+          "default": "FiestaBoard"
+        },
+        "show_on_change": {
+          "type": "boolean",
+          "title": "Show on change",
+          "description": "Switch the clock to the board whenever its page changes, so the change and its transition are seen. Off, the board waits for its turn in the rotation.",
+          "default": true
+        },
+        "duration_s": {
+          "type": "integer",
+          "title": "Display time",
+          "description": "Seconds the board stays on screen in the rotation. Leave empty for the clock's own app duration.",
+          "minimum": 1,
+          "maximum": 3600
+        },
+        "tile_gap": {
+          "type": "string",
+          "title": "Tile style",
+          "description": "Gaps keeps the one-pixel line between neighbouring color tiles, as on a split-flap board. Seamless lights it when both are the same color, so a row of tiles reads as one solid bar.",
+          "enum": [
+            "gap",
+            "fill"
+          ],
+          "enumNames": [
+            "Gaps",
+            "Seamless"
+          ],
+          "default": "gap"
+        },
+        "block_padding": {
+          "type": "integer",
+          "title": "Block padding",
+          "description": "1 pixel grows the background of highlighted text one pixel on every side, so the letters never touch its edge.",
+          "enum": [
+            0,
+            1
+          ],
+          "enumNames": [
+            "Off",
+            "1 pixel"
+          ],
+          "default": 0
+        },
+        "fade_style": {
+          "type": "string",
+          "title": "Fade style",
+          "description": "How the Fade transition looks. Through black streams six pixel frames through black in about a second. Blend cross-fades the two pages.",
+          "enum": [
+            "black",
+            "blend"
+          ],
+          "enumNames": [
+            "Through black",
+            "Blend"
+          ],
+          "default": "black"
+        },
+        "username": {
+          "type": "string",
+          "title": "User name",
+          "description": "Only when the clock's web UI asks for a password (authEnabled in AWTRIX NG's settings)."
+        },
+        "password": {
+          "type": "string",
+          "title": "Password",
+          "description": "Only when the clock's web UI asks for a password.",
+          "secret": true,
+          "ui:widget": "password"
+        }
+      },
+      "required": [
+        "host"
+      ]
+    },
+    "actions": [
+      {
+        "id": "find_awtrix",
+        "label": "Find my clock",
+        "description": "Looks for an AWTRIX NG clock on your local network. Only devices on your network are contacted.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "subnet": {
+              "type": "string",
+              "title": "Network to search",
+              "description": "Optional, for example 192.168.1.0/24. Leave empty to search the network FiestaBoard is on."
+            },
+            "hint_host": {
+              "type": "string",
+              "title": "Address you opened FiestaBoard at",
+              "description": "Optional. The network of this address is searched first."
+            }
+          }
+        }
+      },
+      {
+        "id": "test_connection",
+        "label": "Test connection"
+      }
+    ]
+  }
+}

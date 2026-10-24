@@ -1,0 +1,53 @@
+[
+  {
+    "id": "ulanzi_tc002",
+    "label": "Ulanzi TC002 (AWTRIX NG)",
+    "technology": "led_matrix",
+    "family": "awtrix_ng",
+    "geometry": {
+      "kind": "pixels",
+      "width": 52,
+      "height": 17
+    },
+    "color": {
+      "kind": "rgb",
+      "bitDepth": 24
+    },
+    "charset": "led_3x5",
+    "animation": {
+      "delivery": "stream",
+      "maxFps": 5,
+      "notes": "The Ulanzi TC002 running AWTRIX NG (1.2.2) has a 52x16 RGB matrix. The model is 52x17 on purpose: in the 3x5 face a 16-pixel panel has room for 2 text rows, one pixel short of 3, and FiestaBoard refuses an LED board below 3 x 10. The plugin renders 52x17 (3 rows x 13 columns) and drops the one-pixel gap between the second and third text row before it sends, so the device gets exactly 52x16; the preview keeps that gap. Each frame is one PUT /api/v1/apps/pushed/{name} with a native-size layout (TC002 only: a layout keeps all 52x16 pixels whatever enlargeApps says) whose one region draws a 52x16 base64 RGB888 bitmap. The docs say a pushed app that is on screen shows a replacement at once. maxFps 5 is a conservative starting point, not measured: a pushed app is replaced over HTTP in one request and the TC002 accepts bodies up to 2 MiB (one frame is about 3.4 KB). Pushed apps live in RAM only and vanish when the clock restarts; GET /api/v1/device reports uptimeSeconds, which the plugin watches to resend the page.",
+      "sources": [
+        "https://github.com/Blueforcer/awtrix-ng/blob/main/docs/api/openapi.yaml (PUT /api/v1/apps/pushed/{name}, PUT /api/v1/apps/active, GET /api/v1/device)",
+        "https://github.com/Blueforcer/awtrix-ng/blob/main/docs/reference/payload.md (draw commands: bitmap)",
+        "https://github.com/Blueforcer/awtrix-ng/blob/main/docs/guides/layouts.md (layouts use all 52 x 16 pixels)",
+        "https://github.com/Blueforcer/awtrix-ng/blob/main/docs/guides/pushed-apps.md (an app on screen shows a change at once)",
+        "https://github.com/Blueforcer/awtrix-ng/blob/main/docs/reference/limits.md (2 MiB request body on the TC002)"
+      ]
+    },
+    "font": "3x5",
+    "layoutOptions": {
+      "tileGap": {
+        "allowed": [
+          "gap",
+          "fill"
+        ],
+        "default": "gap"
+      },
+      "blockPadding": {
+        "allowed": [
+          0,
+          1
+        ],
+        "default": 0
+      }
+    },
+    "appearance": {
+      "pixelShape": "square",
+      "dotRatio": 0.82,
+      "offColor": "#171717",
+      "substrateColor": "#0a0a0a"
+    }
+  }
+]

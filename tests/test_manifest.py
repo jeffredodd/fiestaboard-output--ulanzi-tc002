@@ -1,0 +1,71 @@
+"""The manifest and the device data agree with what the plugin does."""
+
+from __future__ import annotations
+
+from src.plugins import led_spec_for_model
+
+from .conftest import _ERRORS, COLS, MANIFEST, ROWS
+
+
+def test_the_manifest_loads_as_an_output_plugin():
+    assert _ERRORS == []
+    assert MANIFEST.id == "awtrix_ng"
+    assert MANIFEST.plugin_type == "output"
+
+
+def test_the_capabilities_come_from_the_tc002_model():
+    caps = MANIFEST.output.capabilities
+    assert caps.technology == "led_matrix"
+    assert caps.delivery == "push"
+    assert caps.animation == "stream"
+    assert caps.min_interval_ms == 1000
+    assert caps.read_back.supported is False
+    assert caps.native_transitions == frozenset()
+    assert caps.device_models == ("ulanzi_tc002",)
+
+
+def test_the_model_is_one_row_taller_than_the_panel_for_three_text_rows():
+    model = MANIFEST.output.model(0)
+    assert model["geometry"] == {"kind": "pixels", "width": 52, "height": 17}
+    assert model["font"] == "3x5" and model["charset"] == "led_3x5"
+    spec = led_spec_for_model(model)
+    assert (spec.width, spec.height, spec.font) == (52, 17, "3x5")
+
+
+def test_the_board_is_three_rows_of_thirteen():
+    from src.outputs.geometry import grid_floor, model_cell_grid
+
+    model = MANIFEST.output.model(0)
+    assert model_cell_grid(model, None) == (ROWS, COLS)
+    assert (ROWS, COLS) >= grid_floor(model)
+
+
+def test_only_the_password_is_secret():
+    props = MANIFEST.output.settings_schema["properties"]
+    assert set(props) == {
+        "host",
+        "app_name",
+        "show_on_change",
+        "duration_s",
+        "tile_gap",
+        "block_padding",
+        "fade_style",
+        "username",
+        "password",
+    }
+    secret = {name for name, p in props.items() if p.get("secret") or p.get("ui:widget") == "password"}
+    assert secret == {"password"}
+
+
+def test_the_address_field_is_a_device_picker_bound_to_find_my_clock():
+    host = MANIFEST.output.settings_schema["properties"]["host"]
+    assert host["ui:widget"] == "device-picker"
+    assert host["ui:options"] == {"action": "find_awtrix", "value_key": "host", "label_key": "label"}
+    actions = [a.id for a in MANIFEST.output.actions]
+    assert actions == ["find_awtrix", "test_connection"]
+
+
+def test_the_app_name_pattern_is_the_clocks():
+    app_name = MANIFEST.output.settings_schema["properties"]["app_name"]
+    assert app_name["pattern"] == "^[A-Za-z0-9_-]{1,32}$"
+    assert app_name["default"] == "FiestaBoard"

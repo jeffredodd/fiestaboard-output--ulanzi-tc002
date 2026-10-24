@@ -1,0 +1,169 @@
+"""Try the plugin on a real TC002 once, and time every request.
+
+**Local / development use only.** It is not part of the plugin and FiestaBoard
+never runs it. It does exactly two things, then stops:
+
+1. shows ``HELLO`` / ``FIESTA`` / ``BOARD`` as a still frame (``write_cells``),
+   as the app ``FiestaBoard`` (or ``--app``), switched to;
+2. waits (5 s by default), then changes to ``FIESTA`` / ``BOARD`` / ``TC002``
+   through ``write_transition`` with the transition FiestaBoard resolves for
+   the TC002 model (flip, streamed as paced pushes), or the one
+   ``--transition`` names.
+
+It prints each HTTP request — method, path, how long it took, the HTTP status
+and the clock's answer (never the pixel data) — so the stream rate can be
+judged against what the panel shows. The app stays on the clock until it
+restarts or you delete it (``curl -X DELETE http://<clock>/api/v1/apps/FiestaBoard``).
+
+Run it from the repository root against a FiestaBoard core checkout that has
+the output-plugin API, with the clock's address on the command line only::
+
+    PYTHONPATH=/path/to/FiestaBoard python3 tools/try_device.py --host 192.168.1.60
+
+``FIESTABOARD_OUTPUTS_ALLOW_HOSTS``, when set, must include the address.
+"""
+
+from __future__ import annotations
+
+import argparse
+import importlib.util
+import json
+import sys
+import time
+from pathlib import Path
+from typing import Any
+from urllib.parse import urlsplit
+
+import requests
+
+ROOT = Path(__file__).resolve().parents[1]
+FIRST = "HELLO\nFIESTA\nBOARD"
+SECOND = "FIESTA\nBOARD\nTC002"
+
+
+def load_plugin_class() -> type:
+    """The plugin class, loaded from this repository's ``__init__.py``."""
+    spec = importlib.util.spec_from_file_location("awtrix_ng_try", ROOT / "__init__.py")
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module.AwtrixNG
+
+
+class Recorder:
+    """A transport for the plugin's ``self.http``: sends for real, and times it."""
+
+    def __init__(self, started: float) -> None:
+        self.started = started
+        self.calls: list[dict[str, Any]] = []
+        self.session = requests.Session()
+
+    def __call__(self, request: Any) -> requests.Response:
+        body = request.json if isinstance(request.json, dict) else {}
+        call: dict[str, Any] = {
+            "at_s": round(time.monotonic() - self.started, 3),
+            "method": request.method,
+            "path": urlsplit(request.url).path,
+            **({"bytes": len(json.dumps(body))} if "layout" in body else {k: body[k] for k in body}),
+        }
+        sent = time.monotonic()
+        try:
+            response = self.session.request(request.method, request.url, timeout=request.timeout, **request.kwargs)
+        except requests.RequestException as exc:
+            call.update(ms=round((time.monotonic() - sent) * 1000), error=f"{type(exc).__name__}: {exc}")
+            self.calls.append(call)
+            raise
+        call.update(ms=round((time.monotonic() - sent) * 1000), status=response.status_code, reply=response.text[:200])
+        self.calls.append(call)
+        return response
+
+
+def build(plugin_cls: type, config: dict[str, Any]) -> Any:
+    from src.plugins.manifest import load_manifest
+
+    manifest, errors = load_manifest(ROOT / "manifest.json")
+    if manifest is None:
+        raise SystemExit(f"manifest.json does not load: {errors}")
+    plugin = plugin_cls(None, config)
+    plugin.bind_manifest(manifest.output)
+    plugin.open()
+    return plugin
+
+
+def run(config: dict[str, Any], *, pause_s: float = 5.0, transition: str | None = None, out=sys.stdout) -> dict[str, Any]:
+    """The two operations against the clock in *config*; the report as a dict (also printed)."""
+    from src.plugins import CancelToken, cells_from_codes, resolve_led_transition, text_to_board_array
+
+    plugin = build(load_plugin_class(), config)
+    started = time.monotonic()
+    recorder = Recorder(started)
+    plugin.http.use_transport(recorder)
+    rows, cols = plugin.board_geometry
+    first = cells_from_codes(text_to_board_array(FIRST, rows, cols))
+    second = cells_from_codes(text_to_board_array(SECOND, rows, cols))
+
+    steps = []
+    check = plugin.check_connection()
+    steps.append({"step": "check_connection", "s": 0, "result": {"success": check.success, "message": check.message}})
+
+    t = time.monotonic()
+    result = plugin.write_cells(first, native=None, cancel=CancelToken())
+    steps.append({"step": "still (write_cells)", "s": round(time.monotonic() - t, 3), "result": result._asdict()})
+
+    time.sleep(pause_s)
+
+    transition = resolve_led_transition(transition, plugin.device_model)
+    t = time.monotonic()
+    result = plugin.write_transition(first, second, transition, cancel=CancelToken())
+    steps.append(
+        {
+            "step": f"change (transition {transition.id}, write_transition)",
+            "s": round(time.monotonic() - t, 3),
+            "result": result._asdict(),
+            "transition": {"id": transition.id, "source": transition.source, "reason": transition.reason},
+        }
+    )
+    plugin.close()
+
+    report = {"host": plugin.host, "app": plugin.app_name, "steps": steps, "calls": recorder.calls}
+    _print(report, out)
+    return report
+
+
+def _print(report: dict[str, Any], out) -> None:
+    print(f"AWTRIX NG at {report['host']}, app {report['app']}", file=out)
+    for call in report["calls"]:
+        what = f"{call['method']} {call['path']}"
+        extra = f"{call['bytes']} B" if "bytes" in call else json.dumps({k: v for k, v in call.items() if k not in _KEYS})
+        tail = call.get("error") or f"HTTP {call.get('status')} {call.get('reply')}"
+        print(f"  t={call['at_s']:7.3f}s  {call['ms']:5d} ms  {what:<42} {extra:<32} {tail}", file=out)
+    for step in report["steps"]:
+        print(f"{step['step']}: {step['s']} s -> {step['result']}", file=out)
+
+
+_KEYS = {"at_s", "method", "path", "ms", "status", "reply", "error", "bytes"}
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    parser.add_argument("--host", required=True, help="the clock's address, for example 192.168.1.60")
+    parser.add_argument("--app", default="FiestaBoard", help="the app name to push to")
+    parser.add_argument("--user", help="the web UI's user name, when it asks for a password")
+    parser.add_argument("--password", help="the web UI's password")
+    parser.add_argument("--pause", type=float, default=5.0, help="seconds between the still frame and the transition")
+    parser.add_argument("--transition", help="the transition to try (flip, slide, wipe, fade, ...); default: the model's")
+    parser.add_argument("--json", type=Path, help="also write the report as JSON to this file")
+    args = parser.parse_args(argv)
+    config = {"host": args.host, "app_name": args.app}
+    if args.user or args.password:
+        config.update(username=args.user or "", password=args.password or "")
+    report = run(config, pause_s=args.pause, transition=args.transition)
+    if args.json:
+        args.json.write_text(json.dumps(report, indent=2))
+    ok = all(step["result"]["success"] for step in report["steps"])
+    return 0 if ok else 1
+
+
+if __name__ == "__main__":  # pragma: no cover - the command line entry point
+    raise SystemExit(main())
