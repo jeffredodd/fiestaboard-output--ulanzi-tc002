@@ -13,15 +13,15 @@ SUNNY 72
 
 52 × 16 pixels, 3 rows of 13 characters.
 
-> **Beta.** Output plugins need FiestaBoard 10.0.0 or later with
-> **Settings → Beta → Output Plugins** turned on. This plugin is written
+> **Beta.** Output plugins need FiestaBoard 10.0.0 or later, where the
+> output-plugin API is still a beta. This plugin is written
 > against the AWTRIX NG 1.2.2 documentation and tested against a mock clock.
 > It has not been timed on a real TC002 yet; see
 > [Verify on your clock](#verify-on-your-clock).
 
 ## Requirements
 
-- FiestaBoard 10.0.0 or later, with output plugins turned on (see above)
+- FiestaBoard 10.0.0 or later (output plugins need no switch turned on)
 - A Ulanzi TC002 running AWTRIX NG, on the same network as FiestaBoard
 - Nothing to install on the clock, and no cloud service or account
 
@@ -30,9 +30,18 @@ cannot draw the full-size layouts the plugin sends.
 
 ## Quick start
 
-1. In FiestaBoard, open **Settings → Plugins** and add
-   `https://github.com/rummeyer/fiestaboard-output--awtrix-ng`.
-2. Create a board and pick the output **AWTRIX NG (Ulanzi TC002)**.
+1. In FiestaBoard, open **Displays → Marketplace** and paste
+   `https://github.com/rummeyer/fiestaboard-output--awtrix-ng` under **Bring
+   your own display** (or use **Integrations → Marketplace → Add from Git**).
+   Or from a terminal:
+
+   ```sh
+   curl -X POST http://<fiestaboard>:4420/api/plugins/install \
+     -H "Content-Type: application/json" \
+     -d '{"repository": "https://github.com/rummeyer/fiestaboard-output--awtrix-ng"}'
+   ```
+
+2. Open **Displays → Add a display** and pick **AWTRIX NG (Ulanzi TC002)**.
 3. Enter the clock's address, or press **Find my clock**. A local name such as
    `awtrixng-a1b2c3.local` works too.
 4. Press **Test connection**. It answers with the clock's firmware version.
