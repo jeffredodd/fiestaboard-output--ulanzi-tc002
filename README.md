@@ -113,7 +113,7 @@ plugin only pushes its own app and switches to it.
 | Setting | Default | |
 |---|---|---|
 | Clock address | — | IP address or local name, as `192.168.1.60` or `awtrixng-a1b2c3.local`. |
-| App name | `FiestaBoard` | The app's name in the rotation and on the clock's **Apps** tab. Letters, digits, `-` and `_`, at most 32. Give each board its own when several boards share one clock. |
+| App name | `FiestaBoard` | The app's name in the rotation and on the clock's **Apps** tab. Letters, digits, `-` and `_`, at most 32; empty is `FiestaBoard`. Give each board its own when several boards share one clock. |
 | Show on change | on | Switch the clock to the board whenever its page changes. |
 | Display time | the clock's | Seconds the board stays on screen in the rotation. |
 | Tile style | Gaps | Seamless lights the line between two tiles of the same colour, so a row of tiles reads as one bar. |

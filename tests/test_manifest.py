@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import re
+
 from src.plugins import led_spec_for_model
 
 from .conftest import _ERRORS, COLS, MANIFEST, ROWS
@@ -67,5 +69,8 @@ def test_the_address_field_is_a_device_picker_bound_to_find_my_clock():
 
 def test_the_app_name_pattern_is_the_clocks():
     app_name = MANIFEST.output.settings_schema["properties"]["app_name"]
-    assert app_name["pattern"] == "^[A-Za-z0-9_-]{1,32}$"
+    # The clock's names, or none: FiestaBoard's settings form leaves the default out, and an
+    # empty field then means FiestaBoard rather than failing to save.
+    assert app_name["pattern"] == "^([A-Za-z0-9_-]{1,32})?$"
+    assert re.match(app_name["pattern"], "")
     assert app_name["default"] == "FiestaBoard"

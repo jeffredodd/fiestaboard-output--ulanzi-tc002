@@ -44,8 +44,8 @@
         "app_name": {
           "type": "string",
           "title": "App name",
-          "description": "The name of the app the board shows up as in the clock's rotation. Letters, digits, - and _, at most 32.",
-          "pattern": "^[A-Za-z0-9_-]{1,32}$",
+          "description": "The name of the app the board shows up as in the clock's rotation. Letters, digits, - and _, at most 32. Empty: FiestaBoard.",
+          "pattern": "^([A-Za-z0-9_-]{1,32})?$",
           "default": "FiestaBoard"
         },
         "show_on_change": {
