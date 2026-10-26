@@ -43,7 +43,7 @@ SECOND = "FIESTA\nBOARD\nTC002"
 
 def load_plugin_class() -> type:
     """The plugin class, loaded from this repository's ``__init__.py``."""
-    spec = importlib.util.spec_from_file_location("awtrix_ng_try", ROOT / "__init__.py")
+    spec = importlib.util.spec_from_file_location("ulanzi_tc002_try", ROOT / "__init__.py")
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = module

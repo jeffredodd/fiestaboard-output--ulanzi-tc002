@@ -5,7 +5,7 @@ from __future__ import annotations
 import time
 
 import pytest
-from plugins.awtrix_ng import FADE_STEPS, PANEL_HEIGHT, PANEL_WIDTH, SEQUENCE_MAX_FRAMES
+from plugins.ulanzi_tc002 import FADE_STEPS, PANEL_HEIGHT, PANEL_WIDTH, SEQUENCE_MAX_FRAMES
 
 from src.led.transition_registry import ResolvedLedTransition
 from src.led.transitions import LedTransitionSpec

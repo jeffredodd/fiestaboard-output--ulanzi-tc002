@@ -380,7 +380,7 @@ def squeeze(pixels: bytes, width: int, height: int) -> bytes:
 class AwtrixNG(OutputPluginBase):
     """One Ulanzi TC002 running AWTRIX NG on the local network."""
 
-    plugin_id = "awtrix_ng"
+    plugin_id = "ulanzi_tc002"
 
     # Device pacing, as instance-overridable attributes (tests shorten them).
     #: Seconds between streamed frames; ``None`` = one frame at the model's

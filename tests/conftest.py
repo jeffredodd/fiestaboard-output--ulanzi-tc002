@@ -14,7 +14,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-from plugins.awtrix_ng import AwtrixNG
+from plugins.ulanzi_tc002 import AwtrixNG
 
 from src.plugins.manifest import load_manifest
 

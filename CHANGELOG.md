@@ -2,6 +2,12 @@
 
 ## 0.2.0 — 2026-10-26
 
+- Now `fiestaboard-output--ulanzi-tc002`, plugin id `ulanzi_tc002`, named for
+  the device; it was `fiestaboard-output--awtrix-ng` with `awtrix_ng`. A board
+  added with 0.1.0 belongs to the old id: install this one, add the board
+  again, then remove the old board and the old plugin.
+- The README says it needs AWTRIX NG: AWTRIX 3 and Ulanzi's own firmware are
+  not supported.
 - Ready for FiestaBoard's plugin registry: search details for the display
   catalog (LED matrices, Ulanzi TC002, AWTRIX) and a data-only `package.json`
   with the device data, as FiestaBoard's own output plugins have.

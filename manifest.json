@@ -1,10 +1,10 @@
 {
-  "id": "awtrix_ng",
+  "id": "ulanzi_tc002",
   "name": "Ulanzi TC002 (AWTRIX NG)",
   "version": "0.2.0",
   "description": "Show your FiestaBoard pages on a Ulanzi TC002 running AWTRIX NG, as an app in its rotation, over your local network.",
   "author": "Oliver Rummeyer",
-  "repository": "https://github.com/rummeyer/fiestaboard-output--awtrix-ng",
+  "repository": "https://github.com/rummeyer/fiestaboard-output--ulanzi-tc002",
   "documentation": "README.md",
   "icon": "grid-3x3",
   "category": "output",

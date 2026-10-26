@@ -1,4 +1,4 @@
-# AWTRIX NG Output Plugin
+# Ulanzi TC002 Output Plugin
 
 Shows your FiestaBoard pages on a **Ulanzi TC002** running
 [AWTRIX NG](https://github.com/Blueforcer/awtrix-ng), over your local
@@ -23,6 +23,12 @@ plugin's page as the clock shows it.
 - A Ulanzi TC002 running AWTRIX NG, on the same network as FiestaBoard
 - Nothing to install on the clock, and no cloud service or account
 
+**AWTRIX NG only.** The plugin is written for AWTRIX NG and tested with it
+alone. AWTRIX 3 and Ulanzi's own firmware are not supported: the plugin
+talks to AWTRIX NG's `/api/v1`, which they do not have, and **Test
+connection** fails on them with *Check that this address is an AWTRIX NG
+clock* rather than letting a board be added that never shows anything.
+
 The 32 × 8 AWTRIX NG clocks (TC001, ESP32 builds) are not supported: they
 cannot draw the full-size layouts the plugin sends.
 
@@ -30,7 +36,7 @@ cannot draw the full-size layouts the plugin sends.
 
 1. In FiestaBoard, open **Displays → Marketplace** and install **Ulanzi
    TC002 (AWTRIX NG)** — search for *AWTRIX* or *TC002*. Where it is not
-   listed yet, paste `https://github.com/rummeyer/fiestaboard-output--awtrix-ng`
+   listed yet, paste `https://github.com/rummeyer/fiestaboard-output--ulanzi-tc002`
    under **Bring your own display** (or use **Integrations → Marketplace → Add
    from Git**).
    Or from a terminal:
@@ -38,7 +44,7 @@ cannot draw the full-size layouts the plugin sends.
    ```sh
    curl -X POST http://<fiestaboard>:4420/api/plugins/install \
      -H "Content-Type: application/json" \
-     -d '{"repository": "https://github.com/rummeyer/fiestaboard-output--awtrix-ng"}'
+     -d '{"repository": "https://github.com/rummeyer/fiestaboard-output--ulanzi-tc002"}'
    ```
 
 2. Open **Displays → Add a display** and pick **Ulanzi TC002 (AWTRIX NG)**.
@@ -235,7 +241,7 @@ conformance suite and needs 80 % coverage. CI runs it on every push.
 | File | Contents |
 |---|---|
 | `__init__.py` | The plugin: rendering, pushing, streaming, discovery, restart detection |
-| `manifest.json` | Plugin id `awtrix_ng`, the board settings and actions |
+| `manifest.json` | Plugin id `ulanzi_tc002`, the board settings and actions |
 | `output/device-models.json` | The `ulanzi_tc002` device model: 52 × 17 pixels, 3×5 font, 5 fps stream, with sources |
 | `tools/try_device.py` | The one-off check against a real clock |
 

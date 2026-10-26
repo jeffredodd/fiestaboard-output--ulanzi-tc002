@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from functools import cache
 
-from plugins.awtrix_ng import AwtrixNG
+from plugins.ulanzi_tc002 import AwtrixNG
 
 from src.outputs.conformance import OutputConformanceSuite
 

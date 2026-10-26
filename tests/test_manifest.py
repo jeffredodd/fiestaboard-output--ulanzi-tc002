@@ -16,7 +16,7 @@ _MANIFEST_JSON = json.loads((ROOT / "manifest.json").read_text())
 
 def test_the_manifest_loads_as_an_output_plugin():
     assert _ERRORS == []
-    assert MANIFEST.id == "awtrix_ng"
+    assert MANIFEST.id == "ulanzi_tc002"
     assert MANIFEST.plugin_type == "output"
 
 

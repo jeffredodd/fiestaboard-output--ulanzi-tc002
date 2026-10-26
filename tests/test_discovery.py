@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import ipaddress
 
-import plugins.awtrix_ng as module
+import plugins.ulanzi_tc002 as module
 import pytest
-from plugins.awtrix_ng import AwtrixNG, candidate_subnets, is_awtrix_reply, sweep
+from plugins.ulanzi_tc002 import AwtrixNG, candidate_subnets, is_awtrix_reply, sweep
 
 from src.plugins import OutputHttp
 

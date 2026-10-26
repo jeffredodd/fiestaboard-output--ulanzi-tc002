@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import pytest
-from plugins.awtrix_ng import GAP_ROW, PANEL_HEIGHT, PANEL_WIDTH, squeeze
+from plugins.ulanzi_tc002 import GAP_ROW, PANEL_HEIGHT, PANEL_WIDTH, squeeze
 
 from src.led import grid_layout
 from src.plugins import layout_message, rasterize
@@ -82,7 +82,7 @@ def test_rich_cells_and_codes_draw_the_same_page():
 
 
 def test_layers_reach_the_renderer_when_the_frame_carries_them(monkeypatch):
-    import plugins.awtrix_ng as module
+    import plugins.ulanzi_tc002 as module
 
     seen = {}
 
