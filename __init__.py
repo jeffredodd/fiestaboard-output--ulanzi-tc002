@@ -18,7 +18,8 @@ What the AWTRIX NG documentation (1.2.2) settles:
   16-pixel panel fits two text rows, and core refuses an LED board below
   3 x 10. The device model is 52 x 17 (3 rows x 13 columns) and
   :meth:`AwtrixNG.render` drops :data:`GAP_ROW`, the gap between the second
-  and the third text row, so the clock gets exactly 52 x 16.
+  and the third text row, so the clock gets exactly 52 x 16. A page that
+  leaves the third row dark is two rows, and those are centred instead.
 - **A replacement shows at once** while the app is on screen, so every LED
   transition core plans is streamed as paced single frames at up to
   :data:`STREAM_MAX_FPS` (a conservative rate, not yet measured on a clock).
@@ -357,10 +358,17 @@ def _takes_layers(layout: Any) -> bool:
 
 def squeeze(pixels: bytes, width: int, height: int) -> bytes:
     """A *width* x *height* RGB888 frame as the panel's 52 x 16: :data:`GAP_ROW`
-    dropped from the model's 52 x 17, anything else cut or padded black."""
+    dropped from the model's 52 x 17, anything else cut or padded black.
+
+    A frame whose third text row is dark, gap and all, is two rows of text:
+    they keep the gap between them and move to the middle of the panel,
+    rather than leaving its bottom third empty.
+    """
     stride = width * 3
     rows = [pixels[y * stride : (y + 1) * stride] for y in range(height)]
-    if height > PANEL_HEIGHT:
+    if height > PANEL_HEIGHT and not any(any(row) for row in rows[GAP_ROW:]):
+        rows = [b""] * ((PANEL_HEIGHT - GAP_ROW) // 2) + rows[:GAP_ROW]
+    elif height > PANEL_HEIGHT:
         del rows[GAP_ROW]
     out = bytearray()
     for y in range(PANEL_HEIGHT):

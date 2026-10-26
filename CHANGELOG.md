@@ -4,6 +4,8 @@
 
 - An empty **App name** saves, and means `FiestaBoard`: FiestaBoard's settings
   form does not fill in a setting's default, and the field failed its pattern.
+- A page that leaves the third row empty is drawn as two rows in the middle
+  of the panel, each with its gap, rather than at the top.
 - README: pictures of the clock and of the setup, and how to make pages for
   the clock.
 

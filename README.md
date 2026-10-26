@@ -111,6 +111,22 @@ The first row, often a title, keeps its space; the second and third touch.
 The board's preview in FiestaBoard still shows the dark row. The larger 5×7
 font fits only 2 rows on 16 pixels and is not offered.
 
+**Two rows read best.** Leave the third row of a page empty and the plugin
+centres the other two, with the gap between them, in the middle of the
+panel:
+
+```
+                    pixel rows 0 and 1 stay dark
+ WOHNEN   22°C      pixel rows 2 to 6
+                    row 7 stays dark
+ SCHLAF   22°C      pixel rows 8 to 12
+                    rows 13 to 15 stay dark
+```
+
+Anything in the third row — a word, a colour tile, a canvas pixel — keeps
+the three-row layout above. FiestaBoard does not allow a board of two rows,
+so the page itself still has three.
+
 ## How it behaves on the clock
 
 **An app in the rotation.** Each frame is a pushed app

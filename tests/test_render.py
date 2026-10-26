@@ -40,6 +40,23 @@ def test_three_rows_of_text_keep_the_gap_under_the_first_and_lose_the_second():
     assert rows_lit(squeezed, 52) == [True] * 5 + [False] + [True] * 10
 
 
+def test_two_rows_of_text_keep_their_gap_and_move_to_the_middle():
+    plugin = build({"host": "192.0.2.10"})
+    frame = [[69] * 13, [69] * 13, [0] * 13]
+    squeezed = plugin.render(frame)
+    assert rows_lit(squeezed, 52) == [False] * 2 + [True] * 5 + [False] + [True] * 5 + [False] * 3
+
+    full = rasterize(plugin.layout(frame))
+    stride = 52 * 3
+    assert squeezed[2 * stride : 13 * stride] == full.pixels[: 11 * stride], "every pixel of the two rows, two down"
+
+
+def test_anything_in_the_third_row_keeps_three_rows():
+    plugin = build({"host": "192.0.2.10"})
+    one_tile = [[69] * 13, [0] * 13, [0] * 12 + [63]]
+    assert rows_lit(plugin.render(one_tile), 52) == [True] * 5 + [False] * 6 + [True] * 5
+
+
 def test_every_lit_pixel_but_the_gap_row_survives():
     plugin = build({"host": "192.0.2.10"})
     frame = [[(r * 13 + c) % 26 + 1 for c in range(13)] for r in range(3)]
