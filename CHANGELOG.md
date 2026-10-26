@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The display is called **Ulanzi TC002 (AWTRIX NG)**: the device first, as
+  the device model already was.
 - An empty **App name** saves, and means `FiestaBoard`: FiestaBoard's settings
   form does not fill in a setting's default, and the field failed its pattern.
 - A page that leaves the third row empty is drawn as two rows in the middle

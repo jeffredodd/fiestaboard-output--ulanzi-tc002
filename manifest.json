@@ -1,6 +1,6 @@
 {
   "id": "awtrix_ng",
-  "name": "AWTRIX NG (Ulanzi TC002)",
+  "name": "Ulanzi TC002 (AWTRIX NG)",
   "version": "0.1.0",
   "description": "Show your FiestaBoard pages on a Ulanzi TC002 running AWTRIX NG, as an app in its rotation, over your local network.",
   "author": "Oliver Rummeyer",
