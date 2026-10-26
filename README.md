@@ -5,19 +5,17 @@ Shows your FiestaBoard pages on a **Ulanzi TC002** running
 network. The board becomes an app in the clock's rotation, beside the
 clock's own apps and scripts.
 
-```
-HELLO WORLD
-SUNNY 72
-🟥🟧🟨🟩🟦🟪
-```
+<img src="docs/clock-word-clock.png" alt="The TC002 showing a word clock page from FiestaBoard: ES IST FUENF / NACH HALB ELF" width="520">
 
-52 × 16 pixels, 3 rows of 13 characters.
+52 × 16 pixels, 3 rows of 13 characters. Above, the
+[Word Clock](https://github.com/rummeyer/fiestaboard-plugin--word-clock)
+plugin's page as the clock shows it.
 
 > **Beta.** Output plugins need FiestaBoard 10.0.0 or later, where the
-> output-plugin API is still a beta. This plugin is written
-> against the AWTRIX NG 1.2.2 documentation and tested against a mock clock.
-> It has not been timed on a real TC002 yet; see
-> [Verify on your clock](#verify-on-your-clock).
+> output-plugin API is still a beta. Runs on a real TC002 with AWTRIX NG
+> 1.2.2 and FiestaBoard 10.1.2: setup, connection test, pages and colours.
+> How Show on change and the animated page changes time on the clock is still
+> to be checked; see [Verify on your clock](#verify-on-your-clock).
 
 ## Requirements
 
@@ -44,9 +42,38 @@ cannot draw the full-size layouts the plugin sends.
 2. Open **Displays → Add a display** and pick **AWTRIX NG (Ulanzi TC002)**.
 3. Enter the clock's address, or press **Find my clock**. A local name such as
    `awtrixng-a1b2c3.local` works too.
-4. Press **Test connection**. It answers with the clock's firmware version.
-5. Put a page on the board. The clock switches to the new app
-   **FiestaBoard** and shows it.
+4. Fill in **App name** (`FiestaBoard`, say) and switch on **Show on
+   change**. FiestaBoard's form shows neither of the plugin's defaults, and
+   saves what it shows.
+5. Press **Test connection**. It answers with the clock's firmware version.
+6. Make a page for the clock (see [Pages for the clock](#pages-for-the-clock))
+   and put it on the board. The clock switches to the app and shows it.
+
+<img src="docs/display-settings.jpg" alt="FiestaBoard's settings of an AWTRIX NG display: name, Pause sends, Restore automatically, Clock address with Find my clock" width="760">
+
+<img src="docs/display-settings-plugin.jpg" alt="The plugin's own settings below: Network to search, App name FiestaBoard, Show on change on, Display time, Tile style, Block padding" width="760">
+
+## Pages for the clock
+
+A page is made for one size of board, and the clock's is its own: 3 rows of
+13. Pages made for a Vestaboard Note (3 × 15) or Flagship do not fit, and
+FiestaBoard will not put them on the clock ("none of its pages fit this board
+size"); a collection of them neither.
+
+To make one, open **Pages → New page** and choose **AWTRIX NG (Ulanzi TC002)**
+in the menu beside **Preview**. The preview then shows the clock's LED grid,
+and the editor counts 13 characters a row.
+
+<img src="docs/page-editor.jpg" alt="A new page in FiestaBoard with AWTRIX NG chosen as its size: the template {{= word_clock.block }} and an LED preview reading ES IST VIERTEL VOR ELF with a red heart" width="760">
+
+A plugin that lays out its own block for the board it is shown on fills the
+13 columns by itself: `{{= word_clock.block }}` above, or the Netatmo
+Weather plugin's `{{= netatmo_weather.block }}`. Fields cut to a Note's 15
+characters, as `title_note` and `artist_note` of Now Playing, run past the
+13 and need their own template.
+
+The page list's filter has the clock too, and shows only the pages that fit
+it.
 
 ## What it shows
 
@@ -60,6 +87,11 @@ characters**.
 - Colour spans (`{red:HOT}`), block spans and icons (`{icon:sun}`), exactly as
   the board's preview in FiestaBoard draws them
 - Pixel canvases over the text, on a FiestaBoard with canvas pages
+
+<img src="docs/clock-colours.png" alt="The clock showing HELLO WORLD, SUNNY in yellow with 21°, and the seven colour tiles red to white" width="420"> <img src="docs/clock-netatmo.png" alt="The clock showing three rows of room temperatures: WOHNEN 22°C, SCHLAF 22°C, BALKON 10°C" width="420">
+
+Left, `HELLO WORLD`, `{yellow:SUNNY} 21°` and the tiles `{63}`–`{69}`; right,
+three full rows from the Netatmo Weather plugin.
 
 ### Why 3 rows fit on 16 pixels
 
