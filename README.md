@@ -28,9 +28,11 @@ cannot draw the full-size layouts the plugin sends.
 
 ## Quick start
 
-1. In FiestaBoard, open **Displays → Marketplace** and paste
-   `https://github.com/rummeyer/fiestaboard-output--awtrix-ng` under **Bring
-   your own display** (or use **Integrations → Marketplace → Add from Git**).
+1. In FiestaBoard, open **Displays → Marketplace** and install **Ulanzi
+   TC002 (AWTRIX NG)** — search for *AWTRIX* or *TC002*. Where it is not
+   listed yet, paste `https://github.com/rummeyer/fiestaboard-output--awtrix-ng`
+   under **Bring your own display** (or use **Integrations → Marketplace → Add
+   from Git**).
    Or from a terminal:
 
    ```sh
@@ -42,9 +44,9 @@ cannot draw the full-size layouts the plugin sends.
 2. Open **Displays → Add a display** and pick **Ulanzi TC002 (AWTRIX NG)**.
 3. Enter the clock's address, or press **Find my clock**. A local name such as
    `awtrixng-a1b2c3.local` works too.
-4. Fill in **App name** (`FiestaBoard`, say) and switch on **Show on
-   change**. FiestaBoard's form shows neither of the plugin's defaults, and
-   saves what it shows.
+4. Switch on **Show on change**: FiestaBoard's form shows it off, whatever
+   the plugin's default, and saves what it shows. **App name** may stay
+   empty, for `FiestaBoard`.
 5. Press **Test connection**. It answers with the clock's firmware version.
 6. Make a page for the clock (see [Pages for the clock](#pages-for-the-clock))
    and put it on the board. The clock switches to the app and shows it.

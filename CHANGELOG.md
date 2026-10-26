@@ -1,7 +1,10 @@
 # Changelog
 
-## Unreleased
+## 0.2.0 — 2026-10-26
 
+- Ready for FiestaBoard's plugin registry: search details for the display
+  catalog (LED matrices, Ulanzi TC002, AWTRIX) and a data-only `package.json`
+  with the device data, as FiestaBoard's own output plugins have.
 - The display is called **Ulanzi TC002 (AWTRIX NG)**: the device first, as
   the device model already was.
 - An empty **App name** saves, and means `FiestaBoard`: FiestaBoard's settings

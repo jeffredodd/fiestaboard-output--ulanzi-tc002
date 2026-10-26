@@ -2,11 +2,16 @@
 
 from __future__ import annotations
 
+import json
 import re
+from pathlib import Path
 
 from src.plugins import led_spec_for_model
 
 from .conftest import _ERRORS, COLS, MANIFEST, ROWS
+
+ROOT = Path(__file__).resolve().parent.parent
+_MANIFEST_JSON = json.loads((ROOT / "manifest.json").read_text())
 
 
 def test_the_manifest_loads_as_an_output_plugin():
@@ -74,3 +79,17 @@ def test_the_app_name_pattern_is_the_clocks():
     assert app_name["pattern"] == "^([A-Za-z0-9_-]{1,32})?$"
     assert re.match(app_name["pattern"], "")
     assert app_name["default"] == "FiestaBoard"
+
+
+def test_the_display_catalog_finds_it_by_device_and_firmware():
+    display = _MANIFEST_JSON["display"]
+    assert display["manufacturer"] == "Ulanzi"
+    assert display["models"] == ["TC002"]
+    assert "AWTRIX NG" in display["keywords"]
+
+
+def test_the_data_package_has_the_manifests_version_and_only_the_device_data():
+    package = json.loads((ROOT / "package.json").read_text())
+    assert package["version"] == _MANIFEST_JSON["version"]
+    assert package["files"] == ["output/*.json"]
+    assert package["private"] is True

@@ -1,0 +1,14 @@
+{
+  "name": "@rummeyer/fiestaboard-output-awtrix-ng",
+  "version": "0.2.0",
+  "description": "Device data for the FiestaBoard AWTRIX NG (Ulanzi TC002) output plugin (data only, no code).",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rummeyer/fiestaboard-output--awtrix-ng.git"
+  },
+  "files": [
+    "output/*.json"
+  ],
+  "private": true
+}
