@@ -248,3 +248,18 @@ conformance suite and needs 80 % coverage. CI runs it on every push.
 ## Licence
 
 MIT. AWTRIX NG is by [Blueforcer](https://github.com/Blueforcer/awtrix-ng).
+
+
+## Native collection rotation (fork candidate)
+
+Requires FiestaBoard 10.3.0 or later. Enable **Native collection rotation** on this display to put each timed collection page in a separate clock app. The TC002's left/right buttons and AWTRIX app-navigation API then select pages. Collection order and dwell times are preserved. Ordinary data refreshes update the app image without stealing the current selection or restarting its timer. Selected-page feedback comes from the clock.
+
+Single pages use one owned slot. Random/rule collections keep FiestaBoard's ordinary streaming behavior. Native mode is off by default; the original streaming behavior remains available. Geometry stays 3 rows of 13 characters, using the same 52x17-to-52x16 compression as ordinary pages, including canvas layers. Preview spacing still differs from the physical panel as described above.
+
+Slots use a stable board-specific namespace. Foreign apps and disabled names are preserved. Interrupted uploads are staged outside the rotation and retried; missing slots after a clock restart are restored. The clock has a limit of 50 pushed apps total. At capacity, opting out must retire this board's native slots before it can create the ordinary slot. A failed legacy push then needs retry. Pausing FiestaBoard stops refreshes but may leave clock-owned apps rotating.
+
+**Override firmware transitions** is a separate, optional master switch, off by default. Effect, direction, duration and automatic rotation apply to the whole TC002, including its other apps. “Use device settings” or an empty duration leaves that value alone. Zero duration switches instantly; automatic rotation Off leaves button/API navigation available. Test connection only reads actual settings. Settings writes require verified TC002 identity, 52x16 geometry, layout capability and an advertised effect; acknowledgement and independent readback must agree. Turning the override off preserves the current device values, rather than restoring old values.
+
+The upstream plugin remains unmodified. This fork preserves its history and MIT license. Physical acceptance is still required before enabling the new mode on an installed display. A legacy app inherited from a previous process is preserved because its name alone does not prove ownership; remove it only after explicitly verifying it belongs to this board.
+
+Native rotation and firmware-control helpers are adapted from [FiestaBoard’s TC001 plugin](https://github.com/Fiestaboard/fiestaboard-output--ulanzi-tc001). Original TC002 rendering and integration are by Oliver Rummeyer; both MIT copyright notices are retained.

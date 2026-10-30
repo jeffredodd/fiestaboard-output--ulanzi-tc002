@@ -1,3 +1,10 @@
+## Unreleased local candidate
+
+- Optional clock-owned timed collections with per-page apps, button/API selection, focus-preserving refresh and selected-page feedback on FiestaBoard10.3.0.
+- Preserve TC002 native-size layout rendering and 52x17 virtual-frame compression.
+- Optional validated device-wide transition controls; defaults leave device settings unchanged.
+- Recover missing apps and interrupted ordering while preserving foreign apps.
+
 # Changelog
 
 ## 0.2.0 — 2026-10-26
