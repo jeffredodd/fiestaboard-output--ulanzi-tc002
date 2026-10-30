@@ -163,7 +163,7 @@ class NativeRotation:
         eligible = desired
         # Replacements do not restart AWTRIX's dwell timer. Only a new selection
         # or lost slot permits a focus change, never a normal refresh.
-        if current not in desired and eligible and (self.reference != playlist.reference_id or missing):
+        if self.plugin.show_on_change and current not in desired and eligible and (self.reference != playlist.reference_id or missing):
             self._call("PUT", "/api/v1/apps/active", cancel, {"name": eligible[0], "fast": True})
             changed = True
         self.payloads, self.pages, self.reference = payloads, pages, playlist.reference_id

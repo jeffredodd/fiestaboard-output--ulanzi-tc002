@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: Fiestaboard/FiestaBoard
-          # Native collection hooks are available in released FiestaBoard10.3.0.
+          # Native collection hooks are available in released FiestaBoard 10.3.0.
           # Test the supported release rather than a moving development branch.
           ref: ${{ inputs.core_ref || 'v10.3.0' }}
           path: fiestaboard-core

@@ -789,7 +789,10 @@ class AwtrixNG(OutputPluginBase):
                 present = {row["name"] for row in rows if row["present"]}
                 restarted = restarted or bool(set(self._native.pages) - present)
             except Exception:
-                return None
+                # The device read already advanced our uptime baseline. Do not
+                # lose a confirmed restart just because inventory is unavailable.
+                if not restarted:
+                    return None
             if NativePageSelection is not None:
                 selection = NativePageSelection(self._native.pages.get(state.get("currentApp")))
         if restarted:

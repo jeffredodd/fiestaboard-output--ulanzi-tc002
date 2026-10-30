@@ -351,3 +351,50 @@ def test_opt_out_retries_failed_final_order_save_after_apps_deleted(make_plugin,
     assert plugin.write(grid(3), native=None, cancel=CancelToken()).success
     assert clock.saved_disabled == clock.disabled
     assert clock.saved_order == clock.order
+
+
+def test_native_show_on_change_off_never_forces_selection(make_plugin, clock):
+    plugin = make_plugin(native_rotation=True, show_on_change=False)
+    value = playlist(("one", 1), ("two", 2))
+    assert sync(plugin, value).success
+    assert clock.current_app == "Time" and clock.switches() == []
+    recreated = make_plugin(native_rotation=True, show_on_change=False)
+    assert sync(recreated, value).success
+    clock.restart()
+    assert sync(recreated, value).success
+    assert clock.current_app == "Time" and clock.switches() == []
+
+
+def test_uptime_restart_survives_temporary_inventory_failure(make_plugin, clock):
+    plugin = make_plugin(native_rotation=True)
+    assert sync(plugin, playlist(("one", 1))).success
+    plugin.poll_device()
+    clock.restart()
+    clock.fail_paths = ("/api/v1/apps",)
+    outcome = plugin.poll_device()
+    assert outcome is not None and outcome.restarted
+    assert not plugin._native.validated
+    assert not plugin._native.payloads
+
+
+def test_capacity_replacement_preserves_old_playlist_until_space_is_available(make_plugin, clock):
+    clock.apps.update({f"foreign{i}": {"text": str(i)} for i in range(48)})
+    plugin = make_plugin(native_rotation=True)
+    assert sync(plugin, playlist(("one", 1), ("two", 2))).success
+    apps, order = dict(clock.apps), list(clock.order)
+    clock.clear()
+    assert not sync(plugin, playlist(("three", 3), ("four", 4))).success
+    assert clock.apps == apps and clock.order == order
+    assert all(method == "GET" for method, _ in clock.calls())
+
+
+def test_conflicting_duplicate_duration_rejects_without_mutating_existing_playlist(make_plugin, clock):
+    plugin = make_plugin(native_rotation=True)
+    assert sync(plugin, playlist(("one", 1))).success
+    value = playlist(("one", 1), ("one", 1))
+    value.entries[1].duration_ms = 10000
+    apps, order = dict(clock.apps), list(clock.order)
+    clock.clear()
+    assert not sync(plugin, value).success
+    assert clock.apps == apps and clock.order == order
+    assert all(method == "GET" for method, _ in clock.calls())
