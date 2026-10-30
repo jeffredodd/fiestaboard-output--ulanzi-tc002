@@ -11,7 +11,7 @@ on:
         description: "FiestaBoard ref to test against (branch, tag or SHA)"
         required: false
         # Keep in step with `ref:` below.
-        default: next
+        default: v10.3.0
 
 permissions:
   contents: read
@@ -30,9 +30,9 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: Fiestaboard/FiestaBoard
-          # The output-plugin API (output_api 1) is on `next` (FiestaBoard 10
-          # beta). Once 10.0.0 is released, pin its tag.
-          ref: ${{ inputs.core_ref || 'next' }}
+          # Native collection hooks are available in released FiestaBoard10.3.0.
+          # Test the supported release rather than a moving development branch.
+          ref: ${{ inputs.core_ref || 'v10.3.0' }}
           path: fiestaboard-core
 
       - uses: actions/setup-python@v5
