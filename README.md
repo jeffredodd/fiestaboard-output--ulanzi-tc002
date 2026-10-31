@@ -262,3 +262,30 @@ Slots use a stable board-specific namespace. Foreign apps and disabled names are
 Physical acceptance of native rotation is still required on your installed display. A legacy app inherited from a previous process is preserved because its name alone does not prove ownership; remove it only after explicitly verifying it belongs to this board.
 
 Native rotation and firmware-control helpers are adapted from [FiestaBoard’s TC001 plugin](https://github.com/Fiestaboard/fiestaboard-output--ulanzi-tc001). Original TC002 rendering and integration are by Oliver Rummeyer; both MIT copyright notices are retained.
+
+## Flexible physical frames (optional newer-core capability)
+
+Native collection rotation and the device controls above are available with
+FiestaBoard **10.3.0**. Flexible JSON pages are a separate capability supplied by
+[FiestaBoard PR #2395](https://github.com/Fiestaboard/FiestaBoard/pull/2395); they
+are not part of the released 10.3.0 contract.
+
+The plugin keeps its **output API 1** manifest. On a core that supplies both the
+physical-frame SDK helpers and capability field, its existing capability hooks
+declare a 52 × 16 physical surface for ordinary and native delivery. On older
+cores those optional helpers are absent, so the plugin loads normally and keeps
+its existing text/Canvas behavior. Native rotation still requires 10.3.0 and
+must remain off on earlier cores.
+
+Explicitly tagged flexible frames preserve exact RGB888 bytes and bypass the
+legacy 52 × 17 row removal and centering. Unmarked legacy pages keep that
+transform. Ordinary writes and native uploads use the same renderer. Transitions
+involving tagged frames use one still replacement because the legacy cell
+animation planner cannot safely mix the two coordinate spaces.
+
+Tests run against released core 10.3.0 and a pinned revision of PR #2395. The
+physical-frame tests skip on the released core, where the capability does not
+exist; legacy rendering and native-rotation tests run on both. No flexible page
+has been installed or verified on physical hardware by this change. Review the
+core reader and backup requirements before enabling flexible documents in a
+shared library.

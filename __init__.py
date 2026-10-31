@@ -94,6 +94,37 @@ try:
 except ImportError:
     NativePageSelection = None
 
+# New flexible-frame SDK is optional: API-1 cores keep their existing paths.
+try:
+    from src.plugins import PhysicalSurface as _PhysicalSurface
+    from src.plugins import physical_frame_pixels as _physical_frame_pixels
+except ImportError:
+    _PhysicalSurface = None
+    _physical_frame_pixels = None
+
+
+def _physical_pixels(frame: Any) -> bytes | None:
+    if _PhysicalSurface is None or _physical_frame_pixels is None:
+        return None
+    return _physical_frame_pixels(frame, PANEL_WIDTH, PANEL_HEIGHT)
+
+
+def _with_physical_frames(capabilities: Any) -> Any:
+    if (
+        _PhysicalSurface is None
+        or _physical_frame_pixels is None
+        or getattr(capabilities, "physical_frames", None) is None
+    ):
+        return capabilities
+    return replace(
+        capabilities,
+        physical_frames={
+            **capabilities.physical_frames,
+            "ulanzi_tc002": _PhysicalSurface(PANEL_WIDTH, PANEL_HEIGHT, frozenset({"ordinary", "native"})),
+        },
+    )
+
+
 logger = logging.getLogger(__name__)
 
 __all__ = ["AwtrixError", "AwtrixNG", "candidate_subnets", "is_awtrix_reply", "sweep"]
@@ -416,6 +447,15 @@ class AwtrixNG(OutputPluginBase):
         self._native = NativeRotation(self)
         self._firmware = FirmwareTransitions(self)
 
+    @classmethod
+    def declared_capabilities(cls, manifest: Any) -> Any:
+        # Existing capability hooks let a newer SDK opt in without making the
+        # on-disk API-1 manifest unreadable by released cores.
+        return _with_physical_frames(super().declared_capabilities(manifest))
+
+    def capabilities(self) -> Any:
+        return _with_physical_frames(super().capabilities())
+
     # --- identity --------------------------------------------------------------------------
 
     def device_key(self) -> str:
@@ -445,6 +485,9 @@ class AwtrixNG(OutputPluginBase):
 
     def render(self, frame: Sequence[Sequence[Any]]) -> bytes:
         """*frame* as the panel's 52 x 16 RGB888, row-major from the top left."""
+        physical = _physical_pixels(frame)
+        if physical is not None:
+            return physical
         return self._panel(rasterize(self.layout(frame)))
 
     @staticmethod
@@ -672,6 +715,10 @@ class AwtrixNG(OutputPluginBase):
         board's ``fade_style`` is ``blend``. Every other kind is planned with
         core's renderer at the stream rate and played as paced stills.
         """
+        # Physical frames already own their geometry. Preserve their final bytes;
+        # the legacy cell transition planner cannot mix these two coordinate spaces.
+        if _physical_pixels(before) is not None or _physical_pixels(after) is not None:
+            return self._still(self.render(after), cancel)
         if transition.spec == "none":
             return self._still(self.render(after), cancel)
         spec = transition.spec
