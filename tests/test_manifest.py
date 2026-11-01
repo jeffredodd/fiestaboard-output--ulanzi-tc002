@@ -83,9 +83,10 @@ def test_the_app_name_pattern_is_the_clocks():
 
 def test_the_display_catalog_finds_it_by_device_and_firmware():
     display = _MANIFEST_JSON["display"]
-    assert display["manufacturer"] == "Ulanzi"
-    assert display["models"] == ["TC002"]
-    assert "AWTRIX NG" in display["keywords"]
+    # Keywords only: FiestaBoard lists a manufacturer and models under the name, and the
+    # device model's label, Ulanzi TC002, is there already.
+    assert "manufacturer" not in display and "models" not in display
+    assert {"Ulanzi", "TC002", "AWTRIX NG"} <= set(display["keywords"])
 
 
 def test_the_data_package_has_the_manifests_version_and_only_the_device_data():

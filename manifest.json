@@ -10,11 +10,9 @@
   "category": "output",
   "display": {
     "category": "LED matrices",
-    "manufacturer": "Ulanzi",
-    "models": [
-      "TC002"
-    ],
     "keywords": [
+      "Ulanzi",
+      "TC002",
       "AWTRIX",
       "AWTRIX NG",
       "pixel clock",
