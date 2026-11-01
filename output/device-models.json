@@ -1,7 +1,7 @@
 [
   {
     "id": "ulanzi_tc002",
-    "label": "Ulanzi TC002 (AWTRIX NG)",
+    "label": "Ulanzi TC002",
     "technology": "led_matrix",
     "family": "awtrix_ng",
     "geometry": {

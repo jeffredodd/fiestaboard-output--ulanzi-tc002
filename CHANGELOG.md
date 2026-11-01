@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- The display is called **Ulanzi TC002**: that it runs AWTRIX NG its
+  description and the README say already.
+
 ## 0.2.0 — 2026-10-26
 
 - Now `fiestaboard-output--ulanzi-tc002`, plugin id `ulanzi_tc002`, named for

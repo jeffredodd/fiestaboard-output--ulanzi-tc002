@@ -35,7 +35,7 @@ cannot draw the full-size layouts the plugin sends.
 ## Quick start
 
 1. In FiestaBoard, open **Displays → Marketplace** and install **Ulanzi
-   TC002 (AWTRIX NG)** — search for *AWTRIX* or *TC002*. Where it is not
+   TC002** — search for *AWTRIX* or *TC002*. Where it is not
    listed yet, paste `https://github.com/rummeyer/fiestaboard-output--ulanzi-tc002`
    under **Bring your own display** (or use **Integrations → Marketplace → Add
    from Git**).
@@ -47,7 +47,7 @@ cannot draw the full-size layouts the plugin sends.
      -d '{"repository": "https://github.com/rummeyer/fiestaboard-output--ulanzi-tc002"}'
    ```
 
-2. Open **Displays → Add a display** and pick **Ulanzi TC002 (AWTRIX NG)**.
+2. Open **Displays → Add a display** and pick **Ulanzi TC002**.
 3. Enter the clock's address, or press **Find my clock**. A local name such as
    `awtrixng-a1b2c3.local` works too.
 4. Switch on **Show on change**: FiestaBoard's form shows it off, whatever
@@ -68,7 +68,7 @@ A page is made for one size of board, and the clock's is its own: 3 rows of
 FiestaBoard will not put them on the clock ("none of its pages fit this board
 size"); a collection of them neither.
 
-To make one, open **Pages → New page** and choose **Ulanzi TC002 (AWTRIX NG)**
+To make one, open **Pages → New page** and choose **Ulanzi TC002**
 in the menu beside **Preview**. The preview then shows the clock's LED grid,
 and the editor counts 13 characters a row.
 
