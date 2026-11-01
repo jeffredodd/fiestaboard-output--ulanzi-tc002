@@ -1,12 +1,10 @@
 # Changelog
 
-## Unreleased
+## 0.2.1 — 2026-11-01
 
 - The display catalog shows only **Ulanzi TC002** under the name, not
   Ulanzi · TC002 · Ulanzi TC002: the manufacturer and model are search
   keywords now.
-
-## 0.2.1 — 2026-11-01
 
 - The display is called **Ulanzi TC002**: that it runs AWTRIX NG its
   description and the README say already.
