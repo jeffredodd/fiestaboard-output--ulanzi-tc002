@@ -35,7 +35,7 @@ cannot draw the full-size layouts the plugin sends.
 ## Quick start
 
 1. In FiestaBoard, open **Displays → Marketplace** and install **Ulanzi
-   TC002 (AWTRIX NG)** — search for *AWTRIX* or *TC002*. Where it is not
+   TC002** — search for *AWTRIX* or *TC002*. Where it is not
    listed yet, paste `https://github.com/rummeyer/fiestaboard-output--ulanzi-tc002`
    under **Bring your own display** (or use **Integrations → Marketplace → Add
    from Git**).
@@ -47,7 +47,7 @@ cannot draw the full-size layouts the plugin sends.
      -d '{"repository": "https://github.com/rummeyer/fiestaboard-output--ulanzi-tc002"}'
    ```
 
-2. Open **Displays → Add a display** and pick **Ulanzi TC002 (AWTRIX NG)**.
+2. Open **Displays → Add a display** and pick **Ulanzi TC002**.
 3. Enter the clock's address, or press **Find my clock**. A local name such as
    `awtrixng-a1b2c3.local` works too.
 4. Switch on **Show on change**: FiestaBoard's form shows it off, whatever
@@ -57,9 +57,9 @@ cannot draw the full-size layouts the plugin sends.
 6. Make a page for the clock (see [Pages for the clock](#pages-for-the-clock))
    and put it on the board. The clock switches to the app and shows it.
 
-<img src="docs/display-settings.jpg" alt="FiestaBoard's settings of an AWTRIX NG display: name, Pause sends, Restore automatically, Clock address with Find my clock" width="760">
+<img src="docs/display-settings.jpg" alt="FiestaBoard's settings of the Ulanzi TC002 display, paused: name, Resume sends, Restore automatically, Clock address with Find my clock" width="760">
 
-<img src="docs/display-settings-plugin.jpg" alt="The plugin's own settings below: Network to search, App name FiestaBoard, Show on change on, Display time, Tile style, Block padding" width="760">
+<img src="docs/display-settings-plugin.jpg" alt="The plugin's own settings below: Network to search, App name, Show on change, Display time, Tile style, Block padding" width="760">
 
 ## Pages for the clock
 
@@ -68,11 +68,11 @@ A page is made for one size of board, and the clock's is its own: 3 rows of
 FiestaBoard will not put them on the clock ("none of its pages fit this board
 size"); a collection of them neither.
 
-To make one, open **Pages → New page** and choose **Ulanzi TC002 (AWTRIX NG)**
+To make one, open **Pages → New page** and choose **Ulanzi TC002**
 in the menu beside **Preview**. The preview then shows the clock's LED grid,
 and the editor counts 13 characters a row.
 
-<img src="docs/page-editor.jpg" alt="A new page in FiestaBoard with AWTRIX NG chosen as its size: the template {{= word_clock.block }} and an LED preview reading ES IST VIERTEL VOR ELF with a red heart" width="760">
+<img src="docs/page-editor.jpg" alt="A new page in FiestaBoard with the Ulanzi TC002 chosen as its size: the template {{= word_clock.block }} and an LED preview reading ES IST FUENF NACH HALB ZWEI with four red hearts" width="760">
 
 A plugin that lays out its own block for the board it is shown on fills the
 13 columns by itself: `{{= word_clock.block }}` above, or the Netatmo

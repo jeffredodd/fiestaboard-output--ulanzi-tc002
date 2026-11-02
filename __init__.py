@@ -1,4 +1,4 @@
-"""AWTRIX NG output plugin for FiestaBoard: a Ulanzi TC002 as a board.
+"""Ulanzi TC002 output plugin for FiestaBoard: the clock, running AWTRIX NG, as a board.
 
 Drives one TC002 running AWTRIX NG over its local HTTP API. The board is a
 **pushed app** in the clock's rotation (``PUT /api/v1/apps/pushed/{name}``),
